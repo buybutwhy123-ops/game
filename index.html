@@ -12,7 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF6A1A'/%3E%3Ctext x='32' y='46' font-family='Arial Black,Arial' font-weight='900' font-size='42' text-anchor='middle' fill='%232A1A10'%3E%3F%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&display=swap">
 <style>
 /* Layout: one phone-width column; a 02:00 case file in 5 chapters, each answering one question.
    Evidence and app screens are cream "paper" in both themes; orange = action & money; cobalt = Moni and clues. */
@@ -28,7 +28,7 @@
   --shadow:0 2px 0 rgba(42,26,16,.06),0 8px 22px rgba(42,26,16,.06);
   --f-display:"Syne","Arial Black",sans-serif;
   --f-head:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --f-mono:"DM Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
   color-scheme:light;
 }
 :root[data-theme="dark"]{
@@ -1176,6 +1176,18 @@ body.ingame .brand .bn{display:none}
 @media (prefers-reduced-motion:reduce){.fx-bump,.say .av.hop svg,#sTime.low,#time.low{animation:none!important}}
 /* v38 · start button always reachable on the opening screen */
 #v-open #openGo{position:sticky;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6}
+/* v39 · consistent corner radii: cards 16px, small buttons and fields 10–12px */
+.prow{border-radius:14px}
+.seg button,.wrow button{border-radius:10px}
+.field textarea,.gcustom input{border-radius:12px}
+.cash-opts button,.receipt2 div{border-radius:16px}
+.toast{border-radius:12px}
+.ex{border-radius:6px}
+/* v39 · shift timer: size the column from the timer's own font so "20" never spills into "Khách 1/5" */
+#shiftPlay .hud-row{grid-template-columns:auto 1fr auto!important}
+#sTime{min-width:2ch}
+/* v39 · Vietnamese stamp in a font that has Vietnamese glyphs */
+[data-hit].got::before{content:"ĐÃ TÌM";font:900 14px/1 var(--f-head)}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -1208,8 +1220,8 @@ body.ingame .brand .bn{display:none}
       <h1 class="hero-title">Tiền<br>đâu rồi<em>?</em></h1>
     </div>
     <div class="open-art" id="openArt" role="img" aria-label="2 giờ sáng, điện thoại báo đã thanh toán, ví mở và tiền bay ra ngoài"></div>
-    <div class="say moc" data-mood="sus" data-moc="2h sáng, bạn trằn trọc mãi mà không tìm được lý do vì sao tiền mình cứ không cánh mà bay từ bao giờ. Hôm nay, Moni sẽ giúp bạn truy đến cùng ai là thủ phạm nhé!"></div>
-    <div class="say thief" data-thief="Thử đoán xem ai là kẻ *doom spending* nào?"></div>
+    <div class="say moc" data-mood="sus" data-moc="2 giờ sáng, bạn trằn trọc mãi mà vẫn không hiểu vì sao tiền cứ không cánh mà bay. Hôm nay, Moni sẽ giúp bạn truy đến cùng xem ai là thủ phạm nhé!"></div>
+    <div class="say thief" data-thief="Thử đoán xem kẻ *doom spending* là ai nào?"></div>
     <button class="btn big" id="openGo" type="button">Bắt đầu chơi <span class="mono">≈ 5 phút</span></button>
     <button class="link-btn" id="openResume" type="button" hidden>Tiếp tục từ chỗ đang chơi</button>
     <div class="mapcard"><span class="mono o">Lộ trình phá án · 5 bước</span><div id="openMap"></div></div>
@@ -1246,7 +1258,7 @@ body.ingame .brand .bn{display:none}
     <span class="tag mono">Manh mối <b>01</b></span>
     <h2>Tìm 6 chiêu khiến bạn dễ xuống tiền</h2>
     <div class="say moc" data-mood="found" data-moc="Đây là trang bán áo của app Chợ 0H. Có 6 chiêu đang trốn trên trang để giục bạn bấm Mua. Bạn soi giúp Moni nhé!"></div>
-    <dl class="brief"><div><dt>Việc của bạn</dt><dd><b>Chạm vào 6 chỗ</b> app đang hối thúc hoặc đánh lừa bạn, ví dụ dòng <span class="ex">CHỈ CÒN 2 SẢN PHẨM</span></dd></div><div><dt>Xong thì</dt><dd>mỗi bẫy tìm được được giải thích ngay. Có <b>45 giây</b>, chạm nhầm mất 2 giây.</dd></div></dl>
+    <dl class="brief"><div><dt>Việc của bạn</dt><dd><b>Chạm vào 6 chỗ</b> app đang hối thúc hoặc đánh lừa bạn, ví dụ dòng <span class="ex">CHỈ CÒN 2 SẢN PHẨM</span></dd></div><div><dt>Xong thì</dt><dd>mỗi bẫy tìm ra sẽ được giải thích ngay. Có <b>45 giây</b>, chạm nhầm mất 2 giây.</dd></div></dl>
     <button class="btn" id="s1Start" type="button">Bắt đầu soi <span class="mono">45 giây</span></button>
   </section>
 
@@ -1254,7 +1266,7 @@ body.ingame .brand .bn{display:none}
   <section id="v-s1" hidden>
     <div class="hud">
       <p class="task">Chạm vào chỗ đang hối thúc hoặc đánh lừa người mua</p>
-      <div class="hud-row"><span class="time" id="time">30</span><span class="found-count">Đã tìm <b id="foundN">0</b>/6</span></div>
+      <div class="hud-row"><span class="time" id="time">45</span><span class="found-count">Đã tìm <b id="foundN">0</b>/6</span></div>
       <div class="bar"><i id="bar"></i></div>
       <div class="pips" id="pips"><span></span><span></span><span></span><span></span><span></span><span></span></div>
     </div>
@@ -1482,12 +1494,12 @@ body.ingame .brand .bn{display:none}
   <!-- CH5: commit -->
   <section id="v-commit" class="wrap" hidden>
     <span class="tag mono">Manh mối <b>05</b> · Thoát bẫy lần sau</span>
-    <h2>Lần tới tay sắp bấm Mua chỉ để thấy khá hơn, bạn sẽ…</h2>
+    <h2>Lần tới, khi tay sắp bấm Mua chỉ để thấy khá hơn, bạn sẽ…</h2>
     <p class="act">Chọn một việc, rồi sửa câu bên dưới cho hợp với bạn.</p>
     <div class="chips" id="cAct"></div>
     <div class="field"><label for="cText">Lời hẹn của bạn (sửa thoải mái)</label><textarea id="cText" maxlength="180"></textarea></div>
     <button class="btn" id="cSave" type="button">Lưu lời hẹn <span class="mono">✓</span></button>
-    <p class="foot">Kế hoạch dạng "nếu… thì…" giúp người ta làm điều mình định làm, đúng lúc cần (Gollwitzer, 1999).</p>
+    <p class="foot">Kế hoạch dạng “nếu… thì…” giúp người ta làm điều mình định làm, đúng lúc cần (Gollwitzer, 1999).</p>
   </section>
 
   <!-- FINAL -->
@@ -1557,8 +1569,8 @@ body.ingame .brand .bn{display:none}
 
 <!-- Trap sheet -->
 <div class="sheet-back" id="sheetBack" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="shTitle">
-    <div class="sh-top"><span id="shIc"></span><div><span class="mono lbl" id="shLabel">Bẫy 1/6</span><h3 id="shTitle"></h3></div></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="trapTitle">
+    <div class="sh-top"><span id="shIc"></span><div><span class="mono lbl" id="shLabel">Bẫy 1/6</span><h3 id="trapTitle"></h3></div></div>
     <p id="shBody"></p>
     <div class="fix"><span class="mono">Cách nhận ra</span><p id="shFix"></p></div>
     <span class="src" id="shSrc"></span>
@@ -1578,7 +1590,7 @@ body.ingame .brand .bn{display:none}
     </div>
     <p id="pSum" style="font-weight:700"></p>
     <div class="wrap" id="pRows" style="gap:8px;max-width:none"></div>
-    <p class="src">"Để chờ" thì món đó rời giỏ. Đêm sau bạn quyết lại, khi đầu óc đã khác.</p>
+    <p class="src">“Để chờ” thì món đó rời giỏ. Đêm sau bạn quyết lại, khi đầu óc đã khác.</p>
     <button class="btn" id="pDone" type="button" disabled>Quay lại giỏ <span class="mono" id="pDoneN">10s</span></button>
   </div>
 </div>
@@ -1706,7 +1718,7 @@ body.ingame .brand .bn{display:none}
   };
 
   var CALM="bình thường";
-  var N="#2a211a",G="#c9b8a4",MONO='font-family="DM Mono,ui-monospace,monospace"';
+  var N="#2a211a",G="#c9b8a4",MONO='font-family="JetBrains Mono,ui-monospace,monospace"';
   function sv(inner){return '<svg viewBox="0 0 320 180" aria-hidden="true"><rect width="320" height="180" rx="10" fill="'+K+'"/>'+inner+'</svg>';}
   var SCENE={
     feel:sv(
@@ -1777,7 +1789,7 @@ body.ingame .brand .bn{display:none}
     {t:"Vì sao tay cứ muốn bấm MUA?",s:"Doom spending là gì",take:"Doom spending: mua sắm để tạm xoa dịu cảm xúc khó chịu.",ic:'<rect x="7" y="33" width="34" height="10" rx="5" fill="#FF8A24" stroke="'+D+'" stroke-width="3"/><path d="M20 31V12a3.5 3.5 0 0 1 7 0v10h4a5 5 0 0 1 5 5v4" stroke="'+D+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="#FFF3E4"/><path d="M11 12l4 3M37 10l-4 3" stroke="#5265FF" stroke-width="2.6" stroke-linecap="round"/>'},
     {t:"Cảm xúc nào đang cầm lái?",s:"3 đêm, 3 tình huống",take:"Cảm xúc lúc mở app có thể chen vào lý do mình mua.",ic:'<circle cx="24" cy="24" r="17" stroke="'+D+'" stroke-width="3.5"/><path d="M7 24h9M32 24h9M24 32v9" stroke="'+D+'" stroke-width="3"/><path d="M24 31c-4-3-8-6-8-10a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 4-4 7-8 10z" fill="#FF6A1A" stroke="'+D+'" stroke-width="2.4" stroke-linejoin="round"/>'},
     {t:"Giải mã dấu vết của bạn",s:"Hồ sơ chi tiêu 3 đêm",take:"Bạn đã nhìn lại cảm xúc, lựa chọn và túi tiền của chính mình.",ic:'<ellipse cx="14" cy="35" rx="4" ry="6" fill="#FF8A24" stroke="'+D+'" stroke-width="2"/><ellipse cx="22" cy="25" rx="3.5" ry="5.5" fill="#FF8A24" stroke="'+D+'" stroke-width="2"/><circle cx="31" cy="18" r="10" fill="rgba(255,255,255,.65)" stroke="'+D+'" stroke-width="3.5"/><path d="M38 25l6 6" stroke="'+D+'" stroke-width="4" stroke-linecap="round"/>'},
-    {t:"Thoát bẫy lần sau",s:"Lời hứa của bạn",take:"Bạn đã có một kế hoạch cho lần tay sắp bấm Mua.",ic:'<rect x="9" y="6" width="23" height="36" rx="3" fill="#FFF3E4" stroke="'+D+'" stroke-width="3"/><path d="M32 6l7 4v28l-7 4" fill="#FF8A24" stroke="'+D+'" stroke-width="3" stroke-linejoin="round"/><circle cx="27" cy="25" r="2" fill="'+D+'"/><path d="M14 18l5 5-5 5" stroke="#5265FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'}
+    {t:"Thoát bẫy lần sau",s:"Lời hứa của bạn",take:"Bạn đã có một kế hoạch cho lần tới, khi tay sắp bấm Mua.",ic:'<rect x="9" y="6" width="23" height="36" rx="3" fill="#FFF3E4" stroke="'+D+'" stroke-width="3"/><path d="M32 6l7 4v28l-7 4" fill="#FF8A24" stroke="'+D+'" stroke-width="3" stroke-linejoin="round"/><circle cx="27" cy="25" r="2" fill="'+D+'"/><path d="M14 18l5 5-5 5" stroke="#5265FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'}
   ];
   function clueSvg(i,s){return '<svg viewBox="0 0 48 48" width="'+(s||30)+'" height="'+(s||30)+'" fill="none" aria-hidden="true">'+CLUES[i].ic+'</svg>';}
   function renderMap(box,done,pick){
@@ -1805,7 +1817,7 @@ body.ingame .brand .bn{display:none}
     clueNext=next;openModal($("clueBack"),$("clueGo"));$("live").textContent="Hoàn thành bước "+n+": "+STEPS[n-1];
   }
   $("clueGo").addEventListener("click",function(){closeModal($("clueBack"));var f=clueNext;clueNext=null;if(f)f();});
-  var OPEN_ART='<svg viewBox="0 0 320 180" aria-hidden="true"><defs><linearGradient id="oaSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1B3D"/><stop offset="1" stop-color="#52304F"/></linearGradient><radialGradient id="oaGlow"><stop offset="0" stop-color="#9AA5FF" stop-opacity=".55"/><stop offset="1" stop-color="#9AA5FF" stop-opacity="0"/></radialGradient></defs><rect width="320" height="180" rx="16" fill="url(#oaSky)"/><g fill="#FFF3E4"><circle cx="112" cy="20" r="1.4"/><circle cx="150" cy="34" r="1.1"/><circle cx="196" cy="16" r="1.5"/><circle cx="214" cy="40" r="1"/></g><rect x="18" y="16" width="70" height="56" rx="7" fill="#3A2752" stroke="#6A4F7A" stroke-width="3"/><path d="M53 16v56M18 44h70" stroke="#6A4F7A" stroke-width="3"/><circle cx="36" cy="30" r="8" fill="#FFF3E4"/><circle cx="40.5" cy="27" r="7" fill="#3A2752"/><rect x="240" y="14" width="66" height="28" rx="8" fill="#1E1230" stroke="#6A4F7A" stroke-width="2.5"/><text x="273" y="33.5" text-anchor="middle" font-family="DM Mono,monospace" font-size="16" fill="#FFC857">02:00</text><rect y="132" width="320" height="48" fill="#6B3D5E"/><rect x="10" y="114" width="64" height="24" rx="11" fill="#FFF3E4"/><circle cx="52" cy="112" r="14" fill="#F2C9A0" stroke="#3A2214" stroke-width="2.5"/><path d="M38 108q2-14 15-14t14 12q-7-5-15-4t-14 6z" fill="#3A2214"/><path d="M60 130c30-22 120-22 170-6v14H60z" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5"/><ellipse cx="88" cy="104" rx="46" ry="34" fill="url(#oaGlow)"/><g transform="rotate(-20 84 102)"><rect x="77" y="90" width="15" height="25" rx="3.5" fill="#1E1230" stroke="#3A2214" stroke-width="2"/><rect x="79.5" y="93" width="10" height="17" rx="1.5" fill="#9AA5FF"/></g><g class="oa-notif" transform="translate(104 38)"><rect width="134" height="48" rx="11" fill="#FFF8EE" stroke="#3A2214" stroke-width="2.5"/><rect x="8" y="9" width="16" height="16" rx="5" fill="#FF6A1A"/><path d="M12 14h2l1.6 6h5l1.4-4.4h-7.4" stroke="#3A2214" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="17" font-size="8.5" font-weight="800" fill="#3A2214">Chợ 0H · vừa xong</text><text x="10" y="35" font-size="10" font-weight="900" fill="#3A2214">Đã thanh toán 349.000đ</text><text x="10" y="44" font-size="7.5" fill="#6B5848">Trả sau 3 kỳ · 02:00</text></g><g class="oa-wallet"><path d="M168 118h52a7 7 0 0 1 7 7v19a7 7 0 0 1-7 7h-52a7 7 0 0 1-7-7v-19a7 7 0 0 1 7-7z" fill="#E94B0C" stroke="#3A2214" stroke-width="2.5"/><path d="M163 124l44-18 8 12" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round"/><rect x="206" y="128" width="21" height="13" rx="4" fill="#FFC46A" stroke="#3A2214" stroke-width="2"/></g><g class="oa-coin c1"><circle cx="186" cy="104" r="8" fill="#FFC857" stroke="#3A2214" stroke-width="2"/><text x="186" y="107.5" text-anchor="middle" font-size="9" font-weight="900" fill="#3A2214">đ</text></g><g class="oa-coin c2"><circle cx="150" cy="104" r="6.5" fill="#FFC857" stroke="#3A2214" stroke-width="2"/><text x="150" y="107" text-anchor="middle" font-size="8" font-weight="900" fill="#3A2214">đ</text></g>'+moni("sus").replace('<svg class="moni m-sus" viewBox','<svg x="236" y="88" width="84" height="84" class="moni m-sus" viewBox')+'</svg>';
+  var OPEN_ART='<svg viewBox="0 0 320 180" aria-hidden="true"><defs><linearGradient id="oaSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1B3D"/><stop offset="1" stop-color="#52304F"/></linearGradient><radialGradient id="oaGlow"><stop offset="0" stop-color="#9AA5FF" stop-opacity=".55"/><stop offset="1" stop-color="#9AA5FF" stop-opacity="0"/></radialGradient></defs><rect width="320" height="180" rx="16" fill="url(#oaSky)"/><g fill="#FFF3E4"><circle cx="112" cy="20" r="1.4"/><circle cx="150" cy="34" r="1.1"/><circle cx="196" cy="16" r="1.5"/><circle cx="214" cy="40" r="1"/></g><rect x="18" y="16" width="70" height="56" rx="7" fill="#3A2752" stroke="#6A4F7A" stroke-width="3"/><path d="M53 16v56M18 44h70" stroke="#6A4F7A" stroke-width="3"/><circle cx="36" cy="30" r="8" fill="#FFF3E4"/><circle cx="40.5" cy="27" r="7" fill="#3A2752"/><rect x="240" y="14" width="66" height="28" rx="8" fill="#1E1230" stroke="#6A4F7A" stroke-width="2.5"/><text x="273" y="33.5" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="16" fill="#FFC857">02:00</text><rect y="132" width="320" height="48" fill="#6B3D5E"/><rect x="10" y="114" width="64" height="24" rx="11" fill="#FFF3E4"/><circle cx="52" cy="112" r="14" fill="#F2C9A0" stroke="#3A2214" stroke-width="2.5"/><path d="M38 108q2-14 15-14t14 12q-7-5-15-4t-14 6z" fill="#3A2214"/><path d="M60 130c30-22 120-22 170-6v14H60z" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5"/><ellipse cx="88" cy="104" rx="46" ry="34" fill="url(#oaGlow)"/><g transform="rotate(-20 84 102)"><rect x="77" y="90" width="15" height="25" rx="3.5" fill="#1E1230" stroke="#3A2214" stroke-width="2"/><rect x="79.5" y="93" width="10" height="17" rx="1.5" fill="#9AA5FF"/></g><g class="oa-notif" transform="translate(104 38)"><rect width="134" height="48" rx="11" fill="#FFF8EE" stroke="#3A2214" stroke-width="2.5"/><rect x="8" y="9" width="16" height="16" rx="5" fill="#FF6A1A"/><path d="M12 14h2l1.6 6h5l1.4-4.4h-7.4" stroke="#3A2214" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="30" y="17" font-size="8.5" font-weight="800" fill="#3A2214">Chợ 0H · vừa xong</text><text x="10" y="35" font-size="10" font-weight="900" fill="#3A2214">Đã thanh toán 349.000đ</text><text x="10" y="44" font-size="7.5" fill="#6B5848">Trả sau 3 kỳ · 02:00</text></g><g class="oa-wallet"><path d="M168 118h52a7 7 0 0 1 7 7v19a7 7 0 0 1-7 7h-52a7 7 0 0 1-7-7v-19a7 7 0 0 1 7-7z" fill="#E94B0C" stroke="#3A2214" stroke-width="2.5"/><path d="M163 124l44-18 8 12" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round"/><rect x="206" y="128" width="21" height="13" rx="4" fill="#FFC46A" stroke="#3A2214" stroke-width="2"/></g><g class="oa-coin c1"><circle cx="186" cy="104" r="8" fill="#FFC857" stroke="#3A2214" stroke-width="2"/><text x="186" y="107.5" text-anchor="middle" font-size="9" font-weight="900" fill="#3A2214">đ</text></g><g class="oa-coin c2"><circle cx="150" cy="104" r="6.5" fill="#FFC857" stroke="#3A2214" stroke-width="2"/><text x="150" y="107" text-anchor="middle" font-size="8" font-weight="900" fill="#3A2214">đ</text></g>'+moni("sus").replace('<svg class="moni m-sus" viewBox','<svg x="236" y="88" width="84" height="84" class="moni m-sus" viewBox')+'</svg>';
   put("openArt",OPEN_ART);
   function put(id,h){var n=$(id);if(n)n.innerHTML=h;}
   put("ic-r1",IC.phone(34,K));put("ic-r2",IC.glass(34,K));put("ic-r3",IC.clock(34,K));put("ic-demoCup",IC.cup(40,O));
@@ -1930,9 +1942,9 @@ body.ingame .brand .bn{display:none}
   /* opening storyboard: 4 frames pop in one by one; the last one hits hardest */
   var SB=[
     {c:"Một ngày chẳng ra gì. Deadline dí, còn bị chê.",a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#F1E0C9"/><path d="M52 26a12 12 0 0 1 23-4 10 10 0 0 1 17 8H48a8 8 0 0 1 4-4z" fill="#8C8C9E"/><path d="M58 40l-3 7M70 40l-3 7M82 40l-3 7" stroke="#5265FF" stroke-width="2.5" stroke-linecap="round"/><rect x="92" y="58" width="44" height="28" rx="4" fill="#3A2214"/><text x="114" y="77" text-anchor="middle" font-size="16" font-weight="900" fill="#FF6A1A">!!</text><circle cx="58" cy="66" r="13" fill="#F2C9A0" stroke="#3A2214" stroke-width="2.5"/><path d="M52 66h4M60 66h4" stroke="#3A2214" stroke-width="2.2"/><path d="M53 74q5-4 10 0" stroke="#3A2214" stroke-width="2.2" fill="none"/><path d="M71 58q3 4 0 7" stroke="#5265FF" stroke-width="2.2" fill="none"/><path d="M40 100q18-24 36 0" fill="#5265FF"/></svg>'},
-    {c:"Tối về, mở app mua sắm lướt cho khuây khỏa.",a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#2B1B3D"/><circle cx="80" cy="54" r="40" fill="#9AA5FF" opacity=".18"/><rect x="62" y="14" width="36" height="72" rx="7" fill="#1E1230" stroke="#3A2214" stroke-width="2.5"/><rect x="66" y="22" width="28" height="56" rx="3" fill="#FFF8EE"/><rect x="69" y="25" width="22" height="7" rx="2" fill="#FF6A1A"/><text x="80" y="30.5" text-anchor="middle" font-size="5.5" font-weight="900" fill="#3A2214">CHỢ 0H</text><rect x="69" y="36" width="10" height="10" rx="2" fill="#FFC46A"/><rect x="81" y="36" width="10" height="10" rx="2" fill="#E6E9FF"/><rect x="69" y="49" width="10" height="10" rx="2" fill="#E6E9FF"/><rect x="81" y="49" width="10" height="10" rx="2" fill="#FFC46A"/><rect x="69" y="62" width="22" height="4" rx="2" fill="#D9C3A7"/><text x="140" y="20" text-anchor="end" font-family="DM Mono,monospace" font-size="10" fill="#FFC857">01:47</text></svg>'},
+    {c:"Tối về, mở app mua sắm lướt cho khuây khỏa.",a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#2B1B3D"/><circle cx="80" cy="54" r="40" fill="#9AA5FF" opacity=".18"/><rect x="62" y="14" width="36" height="72" rx="7" fill="#1E1230" stroke="#3A2214" stroke-width="2.5"/><rect x="66" y="22" width="28" height="56" rx="3" fill="#FFF8EE"/><rect x="69" y="25" width="22" height="7" rx="2" fill="#FF6A1A"/><text x="80" y="30.5" text-anchor="middle" font-size="5.5" font-weight="900" fill="#3A2214">CHỢ 0H</text><rect x="69" y="36" width="10" height="10" rx="2" fill="#FFC46A"/><rect x="81" y="36" width="10" height="10" rx="2" fill="#E6E9FF"/><rect x="69" y="49" width="10" height="10" rx="2" fill="#E6E9FF"/><rect x="81" y="49" width="10" height="10" rx="2" fill="#FFC46A"/><rect x="69" y="62" width="22" height="4" rx="2" fill="#D9C3A7"/><text x="140" y="20" text-anchor="end" font-family="JetBrains Mono,monospace" font-size="10" fill="#FFC857">01:47</text></svg>'},
     {c:"Quảng cáo, khuyến mãi nhảy ra liên tục.",ads:["Bạn xứng đáng được yêu chiều!","CHỈ CÒN 2 SẢN PHẨM!","Mua trước, trả sau!"],a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#2B1B3D"/><rect x="62" y="14" width="36" height="72" rx="7" fill="#1E1230" stroke="#3A2214" stroke-width="2.5"/><rect x="66" y="22" width="28" height="56" rx="3" fill="#FFF8EE"/></svg>'},
-    {c:"Chốt! Chốt! Chốt!… rồi mở ví ra xem.",boom:1,a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#FFE2CC"/><g transform="rotate(-10 40 30)"><rect x="12" y="18" width="58" height="22" rx="5" fill="none" stroke="#E94B0C" stroke-width="3"/><text x="41" y="34" text-anchor="middle" font-size="12" font-weight="900" fill="#E94B0C">ĐÃ TRẢ</text></g><g class="sb-wallet"><path d="M84 46h52a7 7 0 0 1 7 7v26a7 7 0 0 1-7 7H84a7 7 0 0 1-7-7V53a7 7 0 0 1 7-7z" fill="#E94B0C" stroke="#3A2214" stroke-width="2.5"/><path d="M80 52l42-16 8 10" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round"/><rect x="96" y="58" width="36" height="20" rx="5" fill="#FFF8EE" stroke="#3A2214" stroke-width="2"/><text x="114" y="73" text-anchor="middle" font-family="DM Mono,monospace" font-size="13" font-weight="700" fill="#E94B0C">0đ</text></g><path d="M30 62l6 8M44 58l2 10M18 74l10 4" stroke="#3A2214" stroke-width="2.5" stroke-linecap="round"/><rect x="16" y="70" width="40" height="22" rx="4" fill="#FFF8EE" stroke="#3A2214" stroke-width="2"/><path d="M21 77h28M21 83h20" stroke="#D9C3A7" stroke-width="2.5"/></svg>'}
+    {c:"Chốt! Chốt! Chốt!… rồi mở ví ra xem.",boom:1,a:'<svg viewBox="0 0 160 100" aria-hidden="true"><rect width="160" height="100" rx="12" fill="#FFE2CC"/><g transform="rotate(-10 40 30)"><rect x="12" y="18" width="58" height="22" rx="5" fill="none" stroke="#E94B0C" stroke-width="3"/><text x="41" y="34" text-anchor="middle" font-size="12" font-weight="900" fill="#E94B0C">ĐÃ TRẢ</text></g><g class="sb-wallet"><path d="M84 46h52a7 7 0 0 1 7 7v26a7 7 0 0 1-7 7H84a7 7 0 0 1-7-7V53a7 7 0 0 1 7-7z" fill="#E94B0C" stroke="#3A2214" stroke-width="2.5"/><path d="M80 52l42-16 8 10" fill="#FF8A24" stroke="#3A2214" stroke-width="2.5" stroke-linejoin="round"/><rect x="96" y="58" width="36" height="20" rx="5" fill="#FFF8EE" stroke="#3A2214" stroke-width="2"/><text x="114" y="73" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700" fill="#E94B0C">0đ</text></g><path d="M30 62l6 8M44 58l2 10M18 74l10 4" stroke="#3A2214" stroke-width="2.5" stroke-linecap="round"/><rect x="16" y="70" width="40" height="22" rx="4" fill="#FFF8EE" stroke="#3A2214" stroke-width="2"/><path d="M21 77h28M21 83h20" stroke="#D9C3A7" stroke-width="2.5"/></svg>'}
   ];
   var sbT=[];
   function reduced(){try{return window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}}
@@ -1960,7 +1972,7 @@ body.ingame .brand .bn{display:none}
   function helpRules(){
     var v=curView;
     if(v==="v-c1"||v==="v-s1")return["Chạm vào chỗ app đang <b>hối thúc</b> hoặc <b>đánh lừa</b> bạn","Tìm đủ <b>6 bẫy</b> trong <b>45 giây</b>, cuộn để xem hết trang","Chạm nhầm chỗ bình thường: <b>−2 giây</b>"];
-    if(v==="v-s1res"||v==="v-c2"||v==="v-c2b"||v==="v-flow")return["Đọc nhanh, chạm từng thẻ để mở","Bấm nút cam để đi tiếp"];
+    if(v==="v-s1res"||v==="v-c2"||v==="v-c2b")return["Đọc nhanh, chạm từng thẻ để mở","Bấm nút cam để đi tiếp"];
     if(v==="v-goal")return["Chọn <b>1 mục tiêu</b> bạn muốn để dành","3 đêm tới, tiền làm thêm dồn về mục tiêu. Mua gì thì mục tiêu lùi lại"];
     if(v==="v-flow")return["Mỗi đêm 4 việc: <b>làm thêm → gặp chuyện → mở app → nhìn lại</b>","Thanh ở trên cùng cho biết bạn đang ở việc nào"];
     if(v==="v-shift"){var g=gameNow().k;
@@ -2036,7 +2048,7 @@ body.ingame .brand .bn{display:none}
     if(found.indexOf(id)>-1){flash("Bẫy này bạn tìm rồi");return;}
     found.push(id);sfx(found.length===6?"win":"ok");n.classList.add("got");n.setAttribute("data-n",found.length);hud();running=false;
     var t=TRICKS[id];put("shIc",IC[t.ic](44,K));$("shLabel").textContent="Bẫy "+found.length+"/6";
-    $("shTitle").textContent=t.name;$("shBody").textContent=t.body;$("shFix").textContent=t.fix;$("shSrc").textContent="Nguồn: "+t.src;
+    $("trapTitle").textContent=t.name;$("shBody").textContent=t.body;$("shFix").textContent=t.fix;$("shSrc").textContent="Nguồn: "+t.src;
     $("shBtn").firstChild.nodeValue=found.length===6?"Xem kết quả ":"Tìm tiếp ";
     openModal(sheetBack,$("shBtn"));
   }
@@ -2109,7 +2121,7 @@ body.ingame .brand .bn{display:none}
       box.appendChild(b);
     });
     var pts=MOODY.slice(0,k).map(function(y,i){return (52+i*50)+","+y}).join(" ");
-    $("moodLine").innerHTML='<svg viewBox="0 0 320 96"><text x="0" y="12" font-size="10" font-family="DM Mono,monospace" fill="currentColor">TÂM TRẠNG</text><text x="0" y="26" font-size="10" font-family="DM Mono,monospace" fill="currentColor" fill-opacity=".6">vui</text><text x="0" y="90" font-size="10" font-family="DM Mono,monospace" fill="currentColor" fill-opacity=".6">buồn</text><path d="M44 52H312" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="4 4"/><polyline points="'+pts+'" fill="none" stroke="#FF6A1A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'+MOODY.slice(0,k).map(function(y,i){return '<circle cx="'+(52+i*50)+'" cy="'+y+'" r="5" fill="'+(i===4?"#FF6A1A":"#5265FF")+'"/>'}).join("")+'</svg>';
+    $("moodLine").innerHTML='<svg viewBox="0 0 320 96"><text x="0" y="12" font-size="10" font-family="JetBrains Mono,monospace" fill="currentColor">TÂM TRẠNG</text><text x="0" y="26" font-size="10" font-family="JetBrains Mono,monospace" fill="currentColor" fill-opacity=".6">vui</text><text x="0" y="90" font-size="10" font-family="JetBrains Mono,monospace" fill="currentColor" fill-opacity=".6">buồn</text><path d="M44 52H312" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="4 4"/><polyline points="'+pts+'" fill="none" stroke="#FF6A1A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'+MOODY.slice(0,k).map(function(y,i){return '<circle cx="'+(52+i*50)+'" cy="'+y+'" r="5" fill="'+(i===4?"#FF6A1A":"#5265FF")+'"/>'}).join("")+'</svg>';
     var done=k>=6;$("c2Reveal").hidden=!done;$("moodCap").hidden=!done;$("c2Go").hidden=!done;
     if(done)$("c2Reveal").classList.add("appear");
   }
@@ -2158,7 +2170,7 @@ body.ingame .brand .bn{display:none}
   function startShift(){
     W().step="shift";save();
     $("shTag").innerHTML="Đêm <b>"+(W().n+1)+"</b>/3 · Ca làm thêm";
-    var g=gameNow();$("shTitle").textContent=g.title;$("shPayTip").innerHTML="Tip <b>+8.000đ</b>"+g.pay+"<b class=\"neg\">−5.000đ</b>"+g.neg;$("shHint").textContent=g.hint;$("brSit").innerHTML=g.sit;$("brDo").innerHTML=g.act;$("brGet").innerHTML="nhận <b>100.000đ</b> lương + <b>8.000đ</b> tip mỗi lần đúng (sai −5.000đ). Tiền vào ví, tối nay bạn tự quyết tiêu.";$("shGoT").textContent=(g.ms/1000)+" giây";$("shiftGo").firstChild.nodeValue="Bắt đầu ca ";
+    var g=gameNow();$("shTitle").textContent=g.title;$("shPayTip").innerHTML="Tip <b>+8.000đ</b>"+g.pay+"<b class=\"neg\">−5.000đ</b>"+g.neg;$("shHint").textContent=g.hint;$("brSit").innerHTML=g.sit;$("brDo").innerHTML=g.act;$("brGet").innerHTML="nhận <b>100.000đ</b> lương + <b>8.000đ</b> tip mỗi lần đúng (sai −5.000đ). Tiền vào ví, tối nay bạn tự quyết chi tiêu.";$("shGoT").textContent=(g.ms/1000)+" giây";$("shiftGo").firstChild.nodeValue="Bắt đầu ca ";
     $("howTea").hidden=g.k!=="tea";$("howFlyer").hidden=g.k!=="flyer";$("howCash").hidden=g.k!=="cash";
     $("v-shift").classList.remove("playing");$("shiftIdle").hidden=false;$("shiftPlay").hidden=true;$("shiftDone").hidden=true;show("v-shift");
   }
@@ -2281,7 +2293,7 @@ body.ingame .brand .bn{display:none}
   function startEvent(){
     var nt=NT(),w=W();w.step="event";save();
     $("evTag").innerHTML="Đêm <b>"+(w.n+1)+"</b>/3 · Tình huống";$("evTitle").textContent=nt.title;
-    $("evArt").innerHTML=SCENE[nt.key];$("evArt").setAttribute("aria-label","Minh hoạ: "+nt.text);
+    $("evArt").innerHTML=SCENE[nt.key];$("evArt").setAttribute("aria-label","Minh họa: "+nt.text);
     $("evWhen").textContent=nt.when;$("evText").textContent=nt.text;$("evWhy").textContent=nt.why;
     sayNode($("evThief"),"thief",nt.thief);
     var box=$("emoChips");box.innerHTML="";
@@ -2440,7 +2452,7 @@ body.ingame .brand .bn{display:none}
         if(!rec.pans)return;
       }
       if(unplanned.length){
-        qb.hidden=false;$("whyQ").textContent=nt.q+(unplanned.length===1?" ("+unplanned[0].n+")":" (cả "+unplanned.length+" món)");
+        qb.hidden=false;qb.querySelector(".qn").textContent=planned.length?"3":"2";$("whyQ").textContent=nt.q+(unplanned.length===1?" ("+unplanned[0].n+")":" (cả "+unplanned.length+" món)");
         optList($("whyOpts"),nt.opts,rec.ans,function(k){rec.ans=k;save();afterPre();});
         if(!rec.ans)return;
       }
@@ -2469,7 +2481,7 @@ body.ingame .brand .bn{display:none}
     if(["emo","social","bored"].indexOf(type)>-1||ptype==="pstress"||ptype==="ptreat")q="Sau khi chốt, cảm giác “"+(ft||"lúc đó")+"” có nhẹ đi chút nào không?";
     else if(type==="app"){q="Khoan, nếu món này không giảm giá thì bạn còn muốn không?";o=["Còn muốn","Không","Không chắc"];}
     else if(type==="mixed"){q="Nếu để món này chờ một ngày, bạn nghĩ mình còn muốn không?";o=["Còn","Chắc không","Không chắc"];}
-    else if(type==="psale"&&feel.length)q="Ê, nãy bạn chọn “"+ft+"”. Nếu tối nay không thấy vậy, bạn có chốt món này đúng tối nay không?";
+    else if(type==="psale"&&feel.length)q="Ê, nãy bạn chọn “"+ft+"”. Nếu không thấy vậy, bạn có chốt món này đúng tối nay không?";
     else if(type==="pause"&&rec.waited.length){q="Món đang chờ tới mai. Bạn đoán mai mình còn muốn nó không?";o=["Còn","Chắc không","Không chắc"];}
     else if(type==="none"&&feel.length)q="Ê, nãy bạn chọn cảm giác “"+ft+"” đúng không? Bạn nghĩ cảm giác đó có liên quan đến việc mình mở app mua sắm không?";
     else if(type==="none"){q="Đóng app được luôn. Điều gì giúp bạn dừng lại?";o=["Không thấy món cần","Nghĩ tới tiền","Không chắc"];}
@@ -2649,7 +2661,7 @@ body.ingame .brand .bn{display:none}
       drift:"Món nào chưa nói được lý do mua thì đặt điện thoại xuống 10 phút rồi mới quyết.",
       own:"Ghi danh sách cần mua trước khi mở app. Món ngoài danh sách thì để chờ 24 giờ.",
       brake:"Giữ luật “để chờ qua đêm” cả ngoài đời"+(a.dropSum?". Trong game, luật này giữ lại cho bạn "+vnd(a.dropSum):"")+".",
-      calm:net>=g.p?"Bạn đủ tiền cho “"+g.t+"”. Dành ra một khoản nhỏ có kế hoạch để tự thưởng, cho việc giữ ví không quá căng.":"Giữ nhịp này và dành một khoản nhỏ có kế hoạch để tự thưởng. Mục tiêu “"+g.t+"” còn thiếu "+vnd(g.p-Math.max(net,0))+"."
+      calm:net>=g.p?"Bạn đủ tiền cho “"+g.t+"”. Dành ra một khoản nhỏ có kế hoạch để tự thưởng, để việc giữ ví không quá căng.":"Giữ nhịp này và dành một khoản nhỏ có kế hoạch để tự thưởng. Mục tiêu “"+g.t+"” còn thiếu "+vnd(g.p-Math.max(net,0))+"."
     };
     /* side signal sentence from the player's own data */
     var SIDE={ruminate:"Bạn cũng có lúc chốt một món đã ấp ủ để nhẹ đầu lúc stress.",treat:"Bạn cũng có xu hướng tự thưởng sau chuyện không vui.",doomBnpl:"Bạn cũng có lúc vừa mua vì cảm xúc vừa chọn trả sau.",emo:"Bạn cũng có lúc mua để thấy dễ chịu hơn.",social:"Bạn cũng có lúc muốn mua vì thấy người khác có.",bnpl:"Bạn cũng có xu hướng chọn trả sau khi mua sắm.",deal:"Bạn cũng có xu hướng chú ý đến các chương trình giảm giá và ưu đãi khi mua sắm.",drift:"Bạn cũng có lúc mua mà chưa rõ vì sao.",own:"Bạn cũng có lúc mua vì thật sự cần hoặc thích.",brake:"Bạn cũng biết dừng lại trước khi chốt đơn.",calm:"Phần lớn thời gian bạn không để món nảy ra lúc lướt app lọt vào giỏ."};
@@ -2668,7 +2680,7 @@ body.ingame .brand .bn{display:none}
   function wrapText(ctx,t,x,y,maxW,lh){var words=t.split(" "),line="",lines=[];words.forEach(function(wd){var test=line?line+" "+wd:wd;if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=wd;}else line=test;});if(line)lines.push(line);lines.forEach(function(l,i){ctx.fillText(l,x,y+i*lh)});return y+lines.length*lh;}
   function drawShare(P,L,ev){
     var c=document.createElement("canvas");c.width=1080;c.height=1350;var x=c.getContext("2d");if(!x)return null;
-    var F='"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif',M='"DM Mono",ui-monospace,monospace';
+    var F='"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif',M='"JetBrains Mono",ui-monospace,monospace';
     x.fillStyle="#FBF0E1";x.fillRect(0,0,1080,1350);
     var gr=x.createRadialGradient(860,240,20,860,240,520);gr.addColorStop(0,"rgba(255,196,106,.95)");gr.addColorStop(.45,"rgba(255,138,36,.55)");gr.addColorStop(1,"rgba(255,106,26,0)");x.fillStyle=gr;x.fillRect(0,0,1080,1350);
     x.fillStyle="#2A1A10";x.font="500 30px "+M;x.fillText("HỒ SƠ ĐIỀU TRA · TIỀN ĐÂU RỒI?",80,110);
