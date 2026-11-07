@@ -1186,6 +1186,9 @@ body.ingame .brand .bn{display:none}
 /* v39 · shift timer: size the column from the timer's own font so "20" never spills into "Khách 1/5" */
 #shiftPlay .hud-row{grid-template-columns:auto 1fr auto!important}
 #sTime{min-width:2ch}
+/* v40 · case-file reveal: badge and title land with the "boom" of the reveal sound */
+.pcard.reveal .pbadge{animation-delay:.72s}
+.pcard.reveal .plv,.pcard.reveal .pname2,.pcard.reveal .ptag{animation:appear .4s ease .85s both}
 /* v39 · Vietnamese stamp in a font that has Vietnamese glyphs */
 [data-hit].got::before{content:"ĐÃ TÌM";font:900 14px/1 var(--f-head)}
 [hidden]{display:none!important}
@@ -1667,7 +1670,8 @@ body.ingame .brand .bn{display:none}
     bad:function(){tone(210,0,.2,"square",.05,130);},
     coin:function(){tone(1568,0,.07,"square",.045);tone(2093,.06,.22,"square",.045);},
     cash:function(){tone(1046,0,.06,"square",.04);tone(1318,.06,.06,"square",.04);tone(1568,.12,.06,"square",.04);tone(2093,.18,.25,"square",.04);},
-    flip:function(){noise(0,.14,.09,1800);tone(520,.02,.08,"sine",.04,780);},
+    /* soft card flip: a short, low, quiet paper "thp" instead of a loud hiss */
+    flip:function(){noise(0,.05,.03,700);tone(380,0,.09,"sine",.045,560);},
     win:function(){[523,659,784,1047].forEach(function(f,i){tone(f,i*.085,i===3?.35:.16,"triangle",.09);});},
     buy:function(){noise(0,.08,.06,3500);tone(1318,.05,.08,"square",.05);tone(988,.13,.2,"square",.05);},
     pop:function(){tone(420,0,.09,"sine",.09,980);},
@@ -1675,7 +1679,15 @@ body.ingame .brand .bn{display:none}
     tick:function(){tone(1150,0,.035,"square",.03);},
     timeup:function(){tone(440,0,.18,"sawtooth",.045);tone(294,.16,.38,"sawtooth",.045);},
     chime:function(){tone(1175,0,.45,"sine",.07);tone(1568,.1,.55,"sine",.05);},
-    sad:function(){tone(392,0,.18,"triangle",.07,370);tone(330,.16,.32,"triangle",.07,300);}
+    sad:function(){tone(392,0,.18,"triangle",.05,370);tone(330,.16,.32,"triangle",.05,300);},
+    /* case-file reveal: a drumroll that builds, a low boom, then a bright bell chord with sparkles.
+       Deliberately unlike "win" (a quick triangle arpeggio) so the result feels like a surprise. */
+    reveal:function(){
+      for(var i=0;i<14;i++)noise(i*.05,.04,.015+i*.004,320);
+      tone(110,.74,.45,"sine",.13,55);
+      [523,659,784,1047].forEach(function(f){tone(f,.76,.9,"sine",.05);tone(f*2,.76,.5,"sine",.012);});
+      [2093,2637,3136,4186].forEach(function(f,i){tone(f,.86+i*.07,.25,"sine",.025);});
+    }
   };
   function sfx(n){if(!SND.on||!SFX[n])return;try{SFX[n]();}catch(e){}}
   function sndPaint(){$("sndIc").textContent=SND.on?"🔊":"🔇";$("sndBtn").setAttribute("aria-pressed",SND.on?"true":"false");$("sndBtn").setAttribute("aria-label",SND.on?"Tắt âm thanh":"Bật âm thanh");}
@@ -2198,16 +2210,13 @@ body.ingame .brand .bn{display:none}
   function tapCup(i,b){
     if(!sRun||sLock)return;
     if(grid[i]===orderIx){
-      hits++;var before=tips;tips=Math.min(TIP_MAX,tips+TIP);
-      tipMsg(tips>before?"+8.000đ · đúng món "+CUPS[orderIx].n:"Đúng món! Tip đã chạm mức tối đa 40.000đ","good");
+      hits++;gainTip("+8.000đ · đúng món "+CUPS[orderIx].n,"Đúng món! Tip đã chạm mức tối đa 40.000đ");
       b.classList.remove("ok-pop");void b.offsetWidth;b.classList.add("ok-pop");
-      $("sTip").textContent=vnd(tips);cIdx++;sLock=true;
+      cIdx++;sLock=true;
       setTimeout(function(){sLock=false;if(!sRun)return;if(cIdx>=CUSTN){sRun=false;cancelAnimationFrame(sRaf);shiftEnd();}else nextCustomer();},260);
     }else{
       b.classList.remove("miss-shake");void b.offsetWidth;b.classList.add("miss-shake");misses++;
-      var had=tips>0;tips=Math.max(0,tips-TIP_PEN);
-      tipMsg("Khách gọi "+CUPS[orderIx].n+", bạn đưa "+CUPS[grid[i]].n+(had?" · −5.000đ tip":" · tip đang 0đ"),"bad");
-      $("sTip").textContent=vnd(tips);
+      loseTip("Khách gọi "+CUPS[orderIx].n+", bạn đưa "+CUPS[grid[i]].n);
     }
   }
   function setPips(n){[].forEach.call($("custPips").children,function(x,k){x.classList.toggle("on",k<n);});}
@@ -2819,6 +2828,8 @@ body.ingame .brand .bn{display:none}
     rp.appendChild(more);
     tabify(rp,a,w);
     renderChecks();show("v-report");
+    /* first time the case file opens in a run: drumroll → reveal, with the badge stamping in on the boom */
+    if(!R().revealed){R().revealed=1;save();pc.classList.add("reveal");sfx("reveal");setTimeout(function(){confetti(34);},780);}
   }
   function renderChecks(){
     var box=$("checks"),r=R();box.innerHTML="";
