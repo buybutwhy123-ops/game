@@ -1189,6 +1189,18 @@ body.ingame .brand .bn{display:none}
 /* v40 · case-file reveal: badge and title land with the "boom" of the reveal sound */
 .pcard.reveal .pbadge{animation-delay:.72s}
 .pcard.reveal .plv,.pcard.reveal .pname2,.pcard.reveal .ptag{animation:appear .4s ease .85s both}
+/* v41 · UX pass */
+/* shop wallet bar is sticky: it needs its own opaque surface, or the banner and items scroll visibly underneath it */
+#v-shop .status{background:var(--bg)!important;padding-top:10px!important;z-index:6}
+/* shop buttons stay on one line at phone width */
+.shop-actions{grid-template-columns:auto minmax(0,1fr)}
+.shop-actions .btn{white-space:nowrap;font-size:15px!important;padding-inline:14px!important;min-height:52px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* report key numbers: shrink on narrow phones so "267.000đ" never touches the dividers */
+.keynums div{padding:10px 4px!important;min-width:0}
+.keynums b{font-size:clamp(15px,4.6vw,20px)!important;white-space:nowrap}
+/* found stamp sits on the corner, so the trap text stays readable */
+[data-hit].got::before{left:8px;top:-12px;font-size:12px;padding:3px 6px;transform:rotate(-8deg);animation:stampCorner .45s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes stampCorner{from{opacity:0;transform:rotate(-8deg) scale(2)}to{opacity:1;transform:rotate(-8deg)}}
 /* v39 · Vietnamese stamp in a font that has Vietnamese glyphs */
 [data-hit].got::before{content:"ĐÃ TÌM";font:900 14px/1 var(--f-head)}
 [hidden]{display:none!important}
@@ -1593,7 +1605,7 @@ body.ingame .brand .bn{display:none}
     </div>
     <p id="pSum" style="font-weight:700"></p>
     <div class="wrap" id="pRows" style="gap:8px;max-width:none"></div>
-    <p class="src">“Để chờ” thì món đó rời giỏ. Đêm sau bạn quyết lại, khi đầu óc đã khác.</p>
+    <p class="hint left">“Để chờ” thì món đó rời giỏ. Đêm sau bạn quyết lại, khi đầu óc đã khác.</p>
     <button class="btn" id="pDone" type="button" disabled>Quay lại giỏ <span class="mono" id="pDoneN">10s</span></button>
   </div>
 </div>
@@ -2144,19 +2156,20 @@ body.ingame .brand .bn{display:none}
   function parseVnd(v){var n=parseInt(String(v).replace(/[^0-9]/g,""),10);return isNaN(n)?0:n;}
   function customOk(){var g=R().gc||{};return !!(g.t&&g.t.trim()&&g.p>=50000&&g.p<=5000000);}
   function goalReady(){return R().goal==="custom"?customOk():!!R().goal;}
+  function goalHintPaint(){var h=$("goalHint");h.hidden=goalReady();h.textContent=R().goal==="custom"?"Nhập tên và số tiền cho mục tiêu để bắt đầu.":"Chọn 1 mục tiêu để bắt đầu.";}
   function renderGoal(){
     var box=$("goals");box.innerHTML="";
     GOALS.forEach(function(g){
       var b=el("button","goal"+(R().goal===g.k?" on":""));b.type="button";var gi=el("span");gi.innerHTML=IC[g.ic](38);b.appendChild(gi);
       b.appendChild(el("span","nm",g.t));b.appendChild(el("span","pr",g.k==="custom"?"Tự đặt":vnd(g.p)));b.setAttribute("aria-pressed",R().goal===g.k?"true":"false");
-      b.addEventListener("click",function(){R().goal=g.k;save();[].forEach.call(box.children,function(x){x.classList.remove("on");x.setAttribute("aria-pressed","false")});b.classList.add("on");b.setAttribute("aria-pressed","true");$("gCustom").hidden=g.k!=="custom";$("goalGo").disabled=!goalReady();$("goalHint").hidden=goalReady();if(g.k==="custom")$("gcName").focus();});
+      b.addEventListener("click",function(){R().goal=g.k;save();[].forEach.call(box.children,function(x){x.classList.remove("on");x.setAttribute("aria-pressed","false")});b.classList.add("on");b.setAttribute("aria-pressed","true");$("gCustom").hidden=g.k!=="custom";$("goalGo").disabled=!goalReady();goalHintPaint();if(g.k==="custom")$("gcName").focus();});
       box.appendChild(b);
     });
     R().gc=R().gc||{t:"",p:0};$("gcName").value=R().gc.t||"";$("gcAmt").value=R().gc.p?R().gc.p.toLocaleString("vi-VN"):"";$("gCustom").hidden=R().goal!=="custom";
-    $("goalGo").disabled=!goalReady();$("goalHint").hidden=goalReady();R().at="goal";save();show("v-goal");
+    $("goalGo").disabled=!goalReady();goalHintPaint();R().at="goal";save();show("v-goal");
   }
-  $("gcName").addEventListener("input",function(){R().gc.t=this.value.slice(0,40);save();$("goalGo").disabled=!goalReady();$("goalHint").hidden=goalReady();});
-  $("gcAmt").addEventListener("input",function(){var n=parseVnd(this.value);R().gc.p=n;save();$("gcHint").textContent=n?(n<50000||n>5000000?"Hãy nhập từ 50.000đ đến 5.000.000đ.":"= "+vnd(n)+" ≈ "+hrs(n)+" giờ làm thêm"):"Từ 50.000đ đến 5.000.000đ.";$("goalGo").disabled=!goalReady();});
+  $("gcName").addEventListener("input",function(){R().gc.t=this.value.slice(0,40);save();$("goalGo").disabled=!goalReady();goalHintPaint();});
+  $("gcAmt").addEventListener("input",function(){var n=parseVnd(this.value);R().gc.p=n;save();$("gcHint").textContent=n?(n<50000||n>5000000?"Hãy nhập từ 50.000đ đến 5.000.000đ.":"= "+vnd(n)+" ≈ "+hrs(n)+" giờ làm thêm"):"Từ 50.000đ đến 5.000.000đ.";$("goalGo").disabled=!goalReady();goalHintPaint();});
   $("gcAmt").addEventListener("blur",function(){if(R().gc.p)this.value=R().gc.p.toLocaleString("vi-VN");});
   $("goalGo").addEventListener("click",function(){if(!goalReady())return;R().W={n:0,step:"shift",wallet:0,earned:0,plans:[],late:0,nights:[],cart:{},waits:{},emos:[],paused:false};R().at="night";save();startShift();});
   function W(){return R().W;}
@@ -2791,7 +2804,7 @@ body.ingame .brand .bn{display:none}
     /* meters with real counts */
     if(cf.meters.length){var sM=el("div","cf-block");sM.appendChild(el("span","cf-sec","Chỉ số 3 đêm"));
       cf.meters.forEach(function(m){var r=el("div","meter");var lb=el("div","mlb");lb.appendChild(el("span",null,m.l+" · "+m.ln));lb.appendChild(el("span",null,m.rn+" · "+m.r));r.appendChild(lb);
-        var tr=el("div","mtr");var dot=el("i");dot.style.left=Math.round(m.pos*100)+"%";tr.appendChild(dot);r.appendChild(tr);r.appendChild(el("p","mexp",m.exp));sM.appendChild(r);});
+        var tr=el("div","mtr");var dot=el("i");dot.style.left="calc(9px + "+m.pos.toFixed(3)+" * (100% - 18px))";tr.appendChild(dot);r.appendChild(tr);r.appendChild(el("p","mexp",m.exp));sM.appendChild(r);});
       rp.appendChild(sM);}
     var calmN=a.nights.filter(function(n){return n.emos.length===1&&n.emos[0]===CALM});
     if(a.nights.length&&calmN.length===a.nights.length)rp.appendChild(el("p","note","Cả 3 đêm bạn đều chọn “bình thường”. Có thể các tình huống này không giống chuyện của bạn, và cũng không phải ai cũng mua sắm vì cảm xúc. Mấy câu hỏi bên dưới là về bạn ngoài đời."));
