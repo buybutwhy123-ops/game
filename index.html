@@ -1236,6 +1236,86 @@ svg.moni,svg.thief-ic{color:#3A2214}
 @keyframes stampCorner{from{opacity:0;transform:rotate(-8deg) scale(2)}to{opacity:1;transform:rotate(-8deg)}}
 /* v39 · Vietnamese stamp in a font that has Vietnamese glyphs */
 [data-hit].got::before{content:"ĐÃ TÌM";font:900 14px/1 var(--f-head)}
+/* v45 · phone scale. The desktop sizes were tuned for a 460px column seen from arm's length on a laptop;
+   on a phone the same column fills the screen, so type, Moni, buttons and spacing step down ~12%.
+   Inputs stay at 16px so iOS never zooms in on focus; tap targets stay at or above 44px. */
+@media (max-width:480px){
+  body{font-size:15px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+  section.wrap{gap:15px!important}
+  .topbar{margin-bottom:8px!important}
+  .pill-btn,.help-btn{min-height:36px}
+  .help-btn{font-size:12.5px;padding:4px 10px 4px 4px}
+  .help-btn b{width:22px;height:22px;font-size:13px}
+  .nav{margin-bottom:12px}
+  #navName{font-size:14px}
+  .hero-title{font-size:clamp(42px,12.5vw,78px)!important}
+  h2{font-size:clamp(22px,6.4vw,36px)!important;line-height:1.12!important}
+  h3.q{font-size:16.5px}
+  .qn{width:24px;height:24px;font-size:13px;line-height:24px}
+  .lede{font-size:15px!important}
+  .act{font-size:14px}
+  .hint{font-size:12.5px!important}
+  /* narrators */
+  .say{grid-template-columns:58px 1fr!important;gap:8px!important}
+  .say .av{width:58px!important;height:58px!important}
+  #v-open .say.thief{grid-template-columns:1fr 58px!important}
+  .bub{padding:10px 13px!important;border-radius:18px 18px 18px 6px!important}
+  .bub p{font-size:14.5px!important;line-height:1.42!important}
+  #v-open .say.thief .bub{border-radius:18px 18px 6px 18px!important}
+  /* buttons */
+  .btn{min-height:50px;font-size:15.5px;padding:12px 20px}
+  .btn.big{min-height:54px;font-size:16.5px}
+  .btn .mono{font-size:11.5px}
+  .btn.small{min-height:44px;font-size:14px}
+  .shop-actions .btn{min-height:48px;font-size:14px!important}
+  .foot-actions .restart-btn,.foot-actions .home-btn{font-size:12.5px!important;min-height:42px}
+  /* lists, cards, choices */
+  .steps5 li,.pipe li{padding:10px 0!important}
+  .steps5 li b,.pipe li b{font-size:15px}
+  .steps5 li span,.pipe li span{font-size:13.5px}
+  .brief>div{grid-template-columns:82px 1fr;padding:10px 0}
+  .brief dd{font-size:14.5px}
+  .brief>div:nth-child(2) dd{font-size:15px}
+  .opt{padding:11px 12px;min-height:46px;font-size:14.5px}
+  .chip{padding:7px 12px;min-height:40px;font-size:14px}
+  .ck{font-size:13.5px!important}
+  .goal{padding:10px}
+  .goal .nm{font-size:14px}
+  .st6{min-height:118px!important;padding:10px 10px 8px!important}
+  .st6 .se{font-size:26px!important}
+  .st6 .sl{font-size:14px}
+  .st6 .sx{font-size:12.5px!important}
+  .scene .what{font-size:17px}
+  .scene .why{font-size:13px}
+  .define .term{font-size:23px}
+  .define{padding:16px!important}
+  /* play areas */
+  .hud .task,.play-cue{font-size:16px}
+  .time{font-size:24px}
+  .result-score .big{font-size:68px!important}
+  .customer .bubble-order b{font-size:22px!important}
+  .cup{height:78px}
+  .hole{height:88px}
+  .cash-opts button{height:62px;font-size:16px}
+  .earn-big{font-size:38px}
+  .it .nm{font-size:13px}
+  .it .pr{font-size:16px}
+  .banner.hot b{font-size:17px!important}
+  .sb-shout{font-size:clamp(28px,8.6vw,46px)}
+  .sbf figcaption{font-size:12px}
+  /* report + ending */
+  .pbadge{width:92px;height:92px}
+  .pb-ic{font-size:46px}
+  .pcard .pname2{font-size:clamp(23px,7vw,34px)}
+  .pcard .ptag{font-size:14.5px}
+  .tab{font-size:12px;min-height:36px;padding:6px 4px}
+  .pledge{padding:18px 16px}
+  .pledge .tx{font-size:clamp(17px,5vw,24px)}
+  .sig{font-size:22px}
+  .sheet{padding-top:18px;gap:10px}
+  .sheet h3,.help-sheet h3{font-size:20px}
+  .clue-card h3{font-size:21px!important}
+}
 [hidden]{display:none!important}
 </style>
 </head>
