@@ -2763,11 +2763,23 @@ body.ingame .brand .bn{display:none}
     T.forEach(function(t,i){
       var b=el("button","tab"+(i?"":" on"),t[1]);b.type="button";b.id="tab-"+t[0];b.setAttribute("role","tab");b.setAttribute("aria-selected",i?"false":"true");b.setAttribute("aria-controls","pan-"+t[0]);
       var pn=el("div","tpanel");pn.id="pan-"+t[0];pn.setAttribute("role","tabpanel");pn.setAttribute("aria-labelledby",b.id);pn.hidden=!!i;panels[t[0]]=pn;
-      b.addEventListener("click",function(){[].forEach.call(bar.children,function(x){x.classList.remove("on");x.setAttribute("aria-selected","false")});b.classList.add("on");b.setAttribute("aria-selected","true");for(var k in panels)panels[k].hidden=k!==t[0];});
+      b.addEventListener("click",function(){[].forEach.call(bar.children,function(x){x.classList.remove("on");x.setAttribute("aria-selected","false")});b.classList.add("on");b.setAttribute("aria-selected","true");for(var k in panels)panels[k].hidden=k!==t[0];rpTab=i;paintRpGo();});
       bar.appendChild(b);});
     kids.forEach(function(c){var t=tabOf(c);if(t)panels[t].appendChild(c);});
     rp.appendChild(key);rp.appendChild(bar);T.forEach(function(t){rp.appendChild(panels[t[0]])});
     var ckw=document.getElementById("ckWrap");if(ckw)panels.tips.appendChild(ckw);
+    /* the bottom button walks through every tab before it lets you finish step 4 */
+    rpTab=0;rpTabs=T;rpBar=bar;paintRpGo();
+  }
+  var rpTab=0,rpTabs=null,rpBar=null;
+  function paintRpGo(){
+    var last=!rpTabs||rpTab>=rpTabs.length-1;
+    $("rpGo").innerHTML=last?'Hoàn thành bước 4 <span class="mono">✓</span>':'Xem tiếp: '+rpTabs[rpTab+1][1]+' <span class="mono">'+(rpTab+2)+'/'+rpTabs.length+' ▶</span>';
+  }
+  function nextRpTab(){
+    rpBar.children[rpTab+1].click();
+    var y=rpBar.getBoundingClientRect().top+window.scrollY-8;
+    try{window.scrollTo({top:y,behavior:RM?"auto":"smooth"});}catch(e){window.scrollTo(0,y);}
   }
   function renderReport(){
     var w=W(),a=analysis(),g=goalObj(),rp=$("report");var ckw0=document.getElementById("ckWrap");if(ckw0)$("v-report").insertBefore(ckw0,$("rpGo"));rp.innerHTML="";
@@ -2855,7 +2867,7 @@ body.ingame .brand .bn{display:none}
     var n=r.checks.length;
     $("ckFb").hidden=!n;if(n)sayNode($("ckFb"),"moc","Đáng để tự quan sát: chúng lặp lại thường xuyên đến đâu, ảnh hưởng ngân sách nhiều hay ít?","think");
   }
-  $("rpGo").addEventListener("click",function(){R().at="commit";save();clueFound(4,function(){renderCommit(false)});});
+  $("rpGo").addEventListener("click",function(){if(rpTabs&&rpTab<rpTabs.length-1){nextRpTab();return;}R().at="commit";save();clueFound(4,function(){renderCommit(false)});});
 
   /* ---------- CH5: commitment ---------- */
   var draft={a:0,text:""};
