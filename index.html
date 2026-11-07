@@ -1189,6 +1189,17 @@ body.ingame .brand .bn{display:none}
 /* v40 · case-file reveal: badge and title land with the "boom" of the reveal sound */
 .pcard.reveal .pbadge{animation-delay:.72s}
 .pcard.reveal .plv,.pcard.reveal .pname2,.pcard.reveal .ptag{animation:appear .4s ease .85s both}
+/* v43 · footer holds restart + exit as two equal quiet pills; top bar keeps theme, sound, help */
+.page-foot{margin-top:20px!important;padding:16px 16px calc(28px + env(safe-area-inset-bottom,0px))!important;border-top:1px dashed var(--hair)!important;gap:8px}
+.foot-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.foot-actions .restart-btn,.foot-actions .home-btn{display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 10px!important;border:1.5px solid var(--edge)!important;border-radius:999px!important;background:var(--panel)!important;color:var(--fg-body)!important;font:600 13.5px/1.2 var(--f-head)!important;text-decoration:none!important;white-space:nowrap;box-shadow:none!important}
+.foot-actions .restart-btn.armed{border-color:#B4380A!important;color:#B4380A!important;font-weight:700!important}
+:root[data-theme="dark"] .foot-actions .restart-btn.armed{border-color:#FF8A6A!important;color:#FF8A6A!important}
+.page-foot .small{text-align:center}
+/* v43 · dark mode, now reachable from every screen */
+:root[data-theme="dark"] .mtr i{border-color:var(--fg)}
+:root[data-theme="dark"] .prow{border-color:var(--line)}
+:root[data-theme="dark"] .sheet .prow{border-color:#e6d6c2}
 /* v42 · illustrations are pictures now; they sit in the same rounded frames the SVGs used */
 .open-art img,.scene-art img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
 .scene-art img{border-radius:10px}
@@ -1218,7 +1229,6 @@ body.ingame .brand .bn{display:none}
     <button class="pill-btn icon-only" id="themeBtn" type="button"><span id="themeIc" aria-hidden="true">◐</span><span id="themeTx" class="sr">Giao diện</span></button>
     <button class="pill-btn icon-only snd-btn" id="sndBtn" type="button" aria-pressed="true" aria-label="Tắt âm thanh"><span id="sndIc" aria-hidden="true">🔊</span></button>
     <button class="help-btn" id="helpBtn" type="button" hidden aria-label="Xem lại cách chơi. Đồng hồ sẽ tạm dừng."><b aria-hidden="true">?</b> Cách chơi</button>
-    <button class="home-btn" id="homeBtn" type="button" hidden aria-label="Thoát về màn hình chính. Tiến trình vẫn được lưu.">✕ Thoát</button>
   </div>
 </div>
 <nav class="nav" id="prog" hidden aria-label="Bạn đang ở đâu">
@@ -1270,7 +1280,7 @@ body.ingame .brand .bn{display:none}
       <li><b>Hồ sơ của bạn</b><span>Moni tổng kết tiền và lý do bạn mua.</span></li>
       <li><b>Lời hẹn</b><span>Chọn một việc sẽ thử ở lần mua tới.</span></li>
     </ol>
-    <p class="hint">Quên luật? Bấm <b>? Cách chơi</b> ở góc trên, đồng hồ sẽ dừng. <b>✕ Thoát</b> về màn chính, tiến trình vẫn được lưu.</p>
+    <p class="hint">Quên luật? Bấm <b>? Cách chơi</b> ở góc trên, đồng hồ sẽ dừng. Nút <b>☀ / ☾</b> đổi nền sáng/tối. Cuối mỗi trang có <b>✕ Thoát</b> về màn chính, tiến trình vẫn được lưu.</p>
     <button class="btn big" id="howGo" type="button">Bắt đầu bước 1 <span class="mono">▶</span></button>
   </section>
 
@@ -1539,13 +1549,16 @@ body.ingame .brand .bn{display:none}
     <div class="say moc" id="finalMoni"></div>
     <p class="sig">Khoan, soi cái đã!<span>Buy, but why?</span></p>
     <p class="note">Chụp màn hình hoặc chia sẻ thẻ này để giữ lời hứa bên mình nhé.</p>
-    <button class="link-btn" id="fnAgain" type="button">Chơi lại từ đầu ↺</button>
   </section>
 </div>
 
 <div class="page-foot" id="pageFoot" hidden>
-  <button class="restart-btn" id="restartBtn" type="button">Chơi lại từ đầu</button>
+  <div class="foot-actions">
+    <button class="restart-btn" id="restartBtn" type="button">↺ Chơi lại từ đầu</button>
+    <button class="home-btn" id="homeBtn" type="button" aria-label="Thoát về màn hình chính. Tiến trình vẫn được lưu.">✕ Thoát về màn chính</button>
+  </div>
   <p class="small" id="restartHint" hidden>Chạm lần nữa để xóa lượt đang chơi và bắt đầu lại.</p>
+  <p class="small" id="exitHint">Thoát ra vẫn giữ tiến trình, lần sau chơi tiếp được.</p>
 </div>
 
 <!-- Help: review rules, pauses timers -->
@@ -1943,7 +1956,8 @@ body.ingame .brand .bn{display:none}
     renderNav(id);
     document.body.classList.toggle("night",["v-shift","v-event","v-shop","v-why"].indexOf(id)>-1);
     var sec=$(id);sec.classList.remove("enter");void sec.offsetWidth;sec.classList.add("enter");
-    $("pageFoot").hidden=(id==="v-open"||id==="v-story"||id==="v-howto"||id==="v-s1"||id==="v-final");$("homeBtn").hidden=(id==="v-open");document.body.classList.toggle("ingame",id!=="v-open");$("themeBtn").hidden=!(id==="v-open"||id==="v-final");$("helpBtn").hidden=(id==="v-open"||id==="v-story"||id==="v-howto"||id==="v-final");curView=id;resetRestart();
+    /* theme + sound stay in the top bar on every screen; restart + exit live in the page footer on every in-game screen */
+    $("pageFoot").hidden=(id==="v-open");document.body.classList.toggle("ingame",id!=="v-open");$("helpBtn").hidden=(id==="v-open"||id==="v-story"||id==="v-howto"||id==="v-final");curView=id;resetRestart();
     toast.hidden=true;window.scrollTo(0,0);
     var h=$(id).querySelector("h1,h2,.task,.chq");if(h){h.setAttribute("tabindex","-1");try{h.focus({preventScroll:true})}catch(e){}}
   }
@@ -2013,7 +2027,7 @@ body.ingame .brand .bn{display:none}
     if(v==="v-why")return["Tự trả lời <b>vì sao</b> mình mua","<b>Không có đúng sai</b>, chỉ bạn biết"];
     if(v==="v-report")return["Xem <b>3 con số chính</b> ở trên","Chạm các tab <b>Hồ sơ · Dòng tiền · Cảm xúc · Lời khuyên</b>"];
     if(v==="v-commit")return["Chọn 1 việc bạn sẽ thử lần tới","Sửa lại lời hẹn cho hợp với bạn rồi lưu"];
-    return["Bấm nút cam để đi tiếp","<b>✕ Thoát</b> về màn chính, tiến trình vẫn được lưu"];
+    return["Bấm nút cam để đi tiếp","<b>✕ Thoát</b> ở cuối trang để về màn chính, tiến trình vẫn được lưu"];
   }
   function openHelp(){
     if(openSheet)return;
@@ -2037,12 +2051,11 @@ body.ingame .brand .bn{display:none}
   $("openResume").addEventListener("click",resume);
   /* Restart sits at the bottom of the page and needs a second tap, so it is never hit by accident */
   var restartArm=0;
-  function resetRestart(){clearTimeout(restartArm);restartArm=0;$("restartBtn").classList.remove("armed");$("restartBtn").textContent="Chơi lại từ đầu";$("restartHint").hidden=true;}
+  function resetRestart(){clearTimeout(restartArm);restartArm=0;$("restartBtn").classList.remove("armed");$("restartBtn").textContent="↺ Chơi lại từ đầu";$("restartHint").hidden=true;$("exitHint").hidden=false;}
   $("restartBtn").addEventListener("click",function(){
-    if(!restartArm){$("restartBtn").classList.add("armed");$("restartBtn").textContent="Chạm lần nữa để chơi lại";$("restartHint").hidden=false;restartArm=setTimeout(resetRestart,4000);return;}
+    if(!restartArm){$("restartBtn").classList.add("armed");$("restartBtn").textContent="Chạm lần nữa để chơi lại";$("restartHint").hidden=false;$("exitHint").hidden=true;restartArm=setTimeout(resetRestart,4000);return;}
     resetRestart();stopAll();S.run=freshRun();save();renderOpen();window.scrollTo(0,0);
   });
-  $("fnAgain").addEventListener("click",function(){S.run=freshRun();save();renderOpen();});
   function stopAll(){sbT.forEach(clearTimeout);sbT=[];clearTimeout(adT);$("adPop").hidden=true;running=false;cancelAnimationFrame(raf);sRun=false;cancelAnimationFrame(sRaf);clearInterval(pT);["sheetBack","pauseBack","payBack","helpBack"].forEach(function(id){$(id).hidden=true});helpPaused=null;openSheet=null;}
   function resume(){
     var a=R().at;
@@ -2087,7 +2100,7 @@ body.ingame .brand .bn{display:none}
     var r=R();$("s1Num").textContent=r.s1;var box=$("s1Traps");box.innerHTML="";
     ORDER.forEach(function(id){
       var t=TRICKS[id],ok=r.s1found.indexOf(id)>-1,d=el("details","trap"+(ok?" ok":""));
-      var sm=el("summary");var ic=el("span","tic");ic.innerHTML=IC[t.ic](30,"#3A2214");sm.appendChild(ic);
+      var sm=el("summary");var ic=el("span","tic");ic.innerHTML=IC[t.ic](30,"currentColor");sm.appendChild(ic);
       sm.appendChild(el("span","nm",t.name));sm.appendChild(el("span","st",ok?"✓ ĐÃ TÌM":"SÓT"));d.appendChild(sm);
       var body=el("div","tbody");body.appendChild(el("p","wd",t.body));body.appendChild(el("p","fx","Cách nhận ra: "+t.fix.charAt(0).toLowerCase()+t.fix.slice(1)));d.appendChild(body);box.appendChild(d);
     });
