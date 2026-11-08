@@ -12,7 +12,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23FF6A1A'/%3E%3Ctext x='32' y='46' font-family='Arial Black,Arial' font-weight='900' font-size='42' text-anchor='middle' fill='%232A1A10'%3E%3F%3C/text%3E%3C/svg%3E">
 <!-- Google Analytics 4: visits, devices, traffic sources (utm_*) and the game events sent by track() below -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-3J63SCFH2Q"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-3J63SCFH2Q");</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-3J63SCFH2Q",{page_location:location.href,page_referrer:document.referrer});</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@700;800&display=swap">
@@ -1761,7 +1761,14 @@ svg.moni,svg.thief-ic{color:#3A2214}
     var q={};try{location.search.slice(1).split("&").forEach(function(p){var kv=p.split("=");if(kv[0])q[decodeURIComponent(kv[0])]=decodeURIComponent((kv[1]||"").replace(/\+/g," "));});}catch(e){}
     var ref="";try{ref=document.referrer?new URL(document.referrer).hostname:"";}catch(e){}
     if(ref===location.hostname)ref="";
-    var src=q.utm_source?q.utm_source+(q.utm_campaign?" / "+q.utm_campaign:""):(ref||"(trực tiếp)");
+    /* no utm: name the app from the referrer (in-app browsers send l.facebook.com, l.instagram.com, l.threads.net…) or from fbclid */
+    var REF=[[/facebook\.com$|fb\.me$/,"facebook"],[/instagram\.com$/,"instagram"],[/threads\.(net|com)$/,"threads"],[/tiktok\.com$/,"tiktok"],[/zalo\.me$|zaloapp\.com$/,"zalo"],[/messenger\.com$/,"messenger"],[/(^|\.)t\.co$|twitter\.com$|x\.com$/,"x"],[/google\./,"google"],[/youtube\.com$/,"youtube"]];
+    var refName=ref;REF.forEach(function(r){if(ref&&refName===ref&&r[0].test(ref))refName=r[1];});
+    if(!ref&&q.fbclid)refName="facebook/instagram";
+    var src=q.utm_source?q.utm_source+(q.utm_campaign?" / "+q.utm_campaign:""):(refName?refName+" (không gắn link)":"(trực tiếp)");
+    /* drop utm_* / fbclid from the address bar once recorded (GA4 got the full URL in its config),
+       so a player who copies the link and passes it on is not counted under the original channel */
+    try{if(/[?&](utm_[a-z]+|fbclid)=/.test(location.search)){var keep=location.search.slice(1).split("&").filter(function(p){return p&&!/^(utm_[a-z]+|fbclid)=/.test(p)});history.replaceState(null,"",location.pathname+(keep.length?"?"+keep.join("&"):"")+location.hash);}}catch(e){}
     var dev="Máy tính";try{if(window.matchMedia("(pointer:coarse)").matches||window.innerWidth<768)dev="Điện thoại";}catch(e){}
     return {uid:uid,src:src,dev:dev};
   })();
