@@ -1754,7 +1754,7 @@ svg.moni,svg.thief-ic{color:#3A2214}
   /* ---------- anonymous tracking ----------
      One row per milestone goes to the project's Google Sheet (Apps Script web app) and the same event goes to GA4.
      Only button choices are sent, never text the player typed. "uid" is a random id kept in this browser. */
-  var TRACK_URL="";
+  var TRACK_URL="https://script.google.com/macros/s/AKfycbz2u4ZKbo078CSdmV2Ttebe2sdwEXspnrUEfYH14GZn1Xc_3Rm2S-cTqIsdmRgX6Ts/exec";
   var GA_EV={"Bắt đầu chơi":"start_game","Xong bước":"step_complete","Soi bẫy":"trap_result","Mục tiêu":"goal_pick","Ca làm thêm":"shift_done","Cảm xúc":"emotion_pick","Mua sắm":"shop_result","Lý do mua":"buy_reason","Kết quả":"game_result","Tự nhận ngoài đời":"self_check","Lời hẹn":"pledge_pick","Chia sẻ":"share"};
   var TK=(function(){
     var uid="";try{uid=localStorage.getItem("bbw-uid")||"";if(!uid){uid=Date.now().toString(36)+Math.random().toString(36).slice(2,8);localStorage.setItem("bbw-uid",uid);}}catch(e){uid="anon"}
